@@ -1,5 +1,9 @@
 #!/bin/bash
 
+arch_chroot () {
+	arch-chroot /mnt /bin/bash -c "${1}"
+}
+
 refreshPackageList () {
 	pacman -Syy
 }
@@ -25,30 +29,30 @@ updateAndRankMirrorlist () {
 installation () {
 	(echo; echo; echo) | pacstrap -i /mnt base base-devel
 	genfstab -U /mnt > /mnt/etc/fstab
-	arch-chroot /mnt /bin/bash
-	sed 's/#en_US.UTF-8/en_US.UTF-8/g' /etc/loacle.gen
-	sed 's/#sl_SI.UTF-8/sl_SI.UTF-8/g' /etc/loacle.gen
-	locale-gen
-	echo 'LANG=en_US.UTF-8' > /etc/locale.conf
-	echo 'KEYMAP=slovene\nFONT=lat2-16' > /etc/vconsole.conf
-	(echo 8; echo 43; echo 1) | tzselect
-	ln -sf /usr/share/zoneinfo/Europe/Ljubljana /etc/localtime
-	hwclock --systohc --utc
+	#arch-chroot /mnt /bin/bash
+	arch_chroot "sed 's/#en_US.UTF-8/en_US.UTF-8/g' /etc/loacle.gen"
+	arch_chroot "sed 's/#sl_SI.UTF-8/sl_SI.UTF-8/g' /etc/loacle.gen"
+	arch_chroot "locale-gen"
+	arch_chroot "echo 'LANG=en_US.UTF-8' > /etc/locale.conf"
+	arch_chroot "echo 'KEYMAP=slovene\nFONT=lat2-16' > /etc/vconsole.conf"
+	arch_chroot "(echo 8; echo 43; echo 1) | tzselect"
+	arch_chroot "ln -sf /usr/share/zoneinfo/Europe/Ljubljana /etc/localtime"
+	arch_chroot "hwclock --systohc --utc"
 }
 
 installBootloader () {
-	pacman -S --noconfirm intel-ucode grub os-prober
-	grub-install --recheck /dev/sda
-	grub-mkconfig -o /boot/grub/grub.cfg 
+	arch_chroot "pacman -S --noconfirm intel-ucode grub os-prober"
+	arch_chroot "grub-install --recheck /dev/sda"
+	arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 }
 
 hostnameAndUnmount () {
-	echo 'podgancar' > /etc/hostname
-	sed '6s/$/ podgancar/' /etc/hosts
-	sed '7s/$/ podgancar/' /etc/hosts
-	(echo slovenija; echo slovenija) | passwd
-	umount -R /mnt
-	reboot
+	arch_chroot "echo 'podgancar' > /etc/hostname"
+	arch_chroot "sed '6s/$/ podgancar/' /etc/hosts"
+	arch_chroot "sed '7s/$/ podgancar/' /etc/hosts"
+	arch_chroot "(echo slovenija; echo slovenija) | passwd"
+	arch_chroot "umount -R /mnt"
+	arch_chroot "reboot"
 }
 
 echo 'Starting custom Arch installation.'
