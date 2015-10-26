@@ -13,6 +13,8 @@ echo 'General installation and configuration.'
 installation
 echo 'Installing bootloader.'
 installBootloader
+echo 'Setting hostname, unmounting and rebooting.'
+hostnameAndUnmount
 
 function refreshPackageList {
 	pacman -Syy
@@ -51,5 +53,16 @@ function installation {
 }
 
 function installBootloader {
+	pacman -S --noconfirm intel-ucode grub os-prober
+	grub-install --recheck /dev/sda
+	grub-mkconfig -o /boot/grub/grub.cfg 
+}
 
+function hostnameAndUnmount {
+	echo 'podgancar' > /etc/hostname
+	sed '6s/$/ podgancar/' /etc/hosts
+	sed '7s/$/ podgancar/' /etc/hosts
+	(echo slovenija; echo slovenija) | passwd
+	umount -R /mnt
+	reboot
 }
