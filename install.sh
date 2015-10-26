@@ -16,29 +16,29 @@ installBootloader
 echo 'Setting hostname, unmounting and rebooting.'
 hostnameAndUnmount
 
-function refreshPackageList {
+refreshPackageList () {
 	pacman -Syy
 }
 
-function setKeyboard {
+setKeyboard () {
 	loadkeys slovene
 	setfont lat2-16 -m 8859-2
 	# update the system clock
 	timedatectl set-ntp true
 }
 
-function createPartition {
+createPartition () {
 	(echo o; echo n; echo p; echo 1; echo; echo; echo a; echo w) | fdisk /dev/sda
 	mkfs.ext4 /dev/sda1
 	mount /dev/sda1 /mnt
 }
 
-function updateAndRankMirrorlist {
+updateAndRankMirrorlist () {
 	pacman -S --noconfirm reflector
 	reflector --verbose -p http -l 5 --sort rate --save /etc/pacman.d/mirrorlist
 }
 
-function installation {
+installation () {
 	(echo; echo; echo) | pacstrap -i /mnt base base-devel
 	genfstab -U /mnt > /mnt/etc/fstab
 	arch-chroot /mnt /bin/bash
@@ -52,13 +52,13 @@ function installation {
 	hwclock --systohc --utc
 }
 
-function installBootloader {
+installBootloader () {
 	pacman -S --noconfirm intel-ucode grub os-prober
 	grub-install --recheck /dev/sda
 	grub-mkconfig -o /boot/grub/grub.cfg 
 }
 
-function hostnameAndUnmount {
+hostnameAndUnmount () {
 	echo 'podgancar' > /etc/hostname
 	sed '6s/$/ podgancar/' /etc/hosts
 	sed '7s/$/ podgancar/' /etc/hosts
