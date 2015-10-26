@@ -30,12 +30,12 @@ installation () {
 	(echo; echo; echo) | pacstrap -i /mnt base base-devel
 	genfstab -U /mnt > /mnt/etc/fstab
 	#arch-chroot /mnt /bin/bash
-	arch_chroot "sed 's/#en_US.UTF-8/en_US.UTF-8/g' /etc/loacle.gen"
-	arch_chroot "sed 's/#sl_SI.UTF-8/sl_SI.UTF-8/g' /etc/loacle.gen"
+	arch_chroot "sed 's/#en_US.UTF-8/en_US.UTF-8/g' /etc/locale.gen"
+	arch_chroot "sed 's/#sl_SI.UTF-8/sl_SI.UTF-8/g' /etc/locale.gen"
 	arch_chroot "locale-gen"
 	arch_chroot "echo 'LANG=en_US.UTF-8' > /etc/locale.conf"
 	arch_chroot "echo 'KEYMAP=slovene\nFONT=lat2-16' > /etc/vconsole.conf"
-	arch_chroot "(echo 8; echo 43; echo 1) | tzselect"
+	arch_chroot "(echo 8; echo 42; echo 1) | tzselect"
 	arch_chroot "ln -sf /usr/share/zoneinfo/Europe/Ljubljana /etc/localtime"
 	arch_chroot "hwclock --systohc --utc"
 }
@@ -48,25 +48,25 @@ installBootloader () {
 
 hostnameAndUnmount () {
 	arch_chroot "echo 'podgancar' > /etc/hostname"
-	arch_chroot "sed '6s/$/ podgancar/' /etc/hosts"
-	arch_chroot "sed '7s/$/ podgancar/' /etc/hosts"
+	arch_chroot "sed -i '6s/$/ podgancar/' /etc/hosts"
+	arch_chroot "sed -i '7s/$/ podgancar/' /etc/hosts"
 	arch_chroot "(echo slovenija; echo slovenija) | passwd"
 	arch_chroot "umount -R /mnt"
 	arch_chroot "reboot"
 }
 
-echo 'Starting custom Arch installation.'
-echo 'Updating package list.'
+echo -e '\e[42mStarting custom Arch installation.'
+echo -e '\e[42mUpdating package list.'
 refreshPackageList
-echo 'Setting keyboard and updating system clock.'
+echo -e '\e[42mSetting keyboard and updating system clock.'
 setKeyboard
-echo 'Making BIOS/MBT partition table and partition.'
+echo -e '\e[42mMaking BIOS/MBT partition table and partition.'
 createPartition
-echo 'Updating and ranking mirrorlist.'
+echo -e '\e[42mUpdating and ranking mirrorlist.'
 updateAndRankMirrorlist
-echo 'General installation and configuration.'
+echo -e '\e[42mGeneral installation and configuration.'
 installation
-echo 'Installing bootloader.'
+echo -e '\e[42mInstalling bootloader.'
 installBootloader
-echo 'Setting hostname, unmounting and rebooting.'
+echo -e '\e[42mSetting hostname, unmounting and rebooting.'
 hostnameAndUnmount
