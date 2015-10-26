@@ -1,21 +1,5 @@
 #!/bin/bash
 
-echo 'Starting custom Arch installation.'
-echo 'Updating package list.'
-refreshPackageList
-echo 'Setting keyboard and updating system clock.'
-setKeyboard
-echo 'Making BIOS/MBT partition table and partition.'
-createPartition
-echo 'Updating and ranking mirrorlist.'
-updateAndRankMirrorlist
-echo 'General installation and configuration.'
-installation
-echo 'Installing bootloader.'
-installBootloader
-echo 'Setting hostname, unmounting and rebooting.'
-hostnameAndUnmount
-
 refreshPackageList () {
 	pacman -Syy
 }
@@ -66,3 +50,19 @@ hostnameAndUnmount () {
 	umount -R /mnt
 	reboot
 }
+
+echo 'Starting custom Arch installation.'
+echo 'Updating package list.'
+refreshPackageList
+echo 'Setting keyboard and updating system clock.'
+setKeyboard
+echo 'Making BIOS/MBT partition table and partition.'
+createPartition
+echo 'Updating and ranking mirrorlist.'
+updateAndRankMirrorlist
+echo 'General installation and configuration.'
+installation
+echo 'Installing bootloader.'
+installBootloader
+echo 'Setting hostname, unmounting and rebooting.'
+hostnameAndUnmount
