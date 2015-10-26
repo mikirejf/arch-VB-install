@@ -7,6 +7,12 @@ echo 'Setting keyboard and updating system clock.'
 setKeyboard
 echo 'Making BIOS/MBT partition table and partition.'
 createPartition
+echo 'Updating and ranking mirrorlist.'
+updateAndRankMirrorlist
+echo 'General installation and configuration.'
+installation
+echo 'Installing bootloader.'
+installBootloader
 
 function refreshPackageList {
 	pacman -Syy
@@ -31,6 +37,19 @@ function updateAndRankMirrorlist {
 }
 
 function installation {
-	(echo; echo; echo;) | pacstrap -i /mnt base base-devel
+	(echo; echo; echo) | pacstrap -i /mnt base base-devel
 	genfstab -U /mnt > /mnt/etc/fstab
+	arch-chroot /mnt /bin/bash
+	sed 's/#en_US.UTF-8/en_US.UTF-8/g' /etc/loacle.gen
+	sed 's/#sl_SI.UTF-8/sl_SI.UTF-8/g' /etc/loacle.gen
+	locale-gen
+	echo 'LANG=en_US.UTF-8' > /etc/locale.conf
+	echo 'KEYMAP=slovene\nFONT=lat2-16' > /etc/vconsole.conf
+	(echo 8; echo 43; echo 1) | tzselect
+	ln -sf /usr/share/zoneinfo/Europe/Ljubljana /etc/localtime
+	hwclock --systohc --utc
+}
+
+function installBootloader {
+
 }
