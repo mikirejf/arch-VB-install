@@ -41,7 +41,7 @@ installation () {
 }
 
 installBootloader () {
-	arch_chroot "pacman -S --noconfirm intel-ucode grub os-prober"
+	arch_chroot "pacman -S --noconfirm intel-ucode grub"
 	arch_chroot "grub-install --recheck /dev/sda"
 	arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 }
@@ -51,8 +51,8 @@ hostnameAndUnmount () {
 	arch_chroot "sed -i '6s/$/ podgancar/' /etc/hosts"
 	arch_chroot "sed -i '7s/$/ podgancar/' /etc/hosts"
 	arch_chroot "(echo slovenija; echo slovenija) | passwd"
-	arch_chroot "umount -R /mnt"
-	arch_chroot "reboot"
+	umount -R /mnt
+	reboot
 }
 
 echo -e '\e[42mStarting custom Arch installation.\e[49m'
