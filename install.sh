@@ -34,7 +34,7 @@ installation () {
 	arch_chroot "sed 's/#sl_SI.UTF-8/sl_SI.UTF-8/g' /etc/locale.gen"
 	arch_chroot "locale-gen"
 	arch_chroot "echo 'LANG=en_US.UTF-8' > /etc/locale.conf"
-	arch_chroot "echo 'KEYMAP=slovene\nFONT=lat2-16' > /etc/vconsole.conf"
+	arch_chroot "echo -e 'KEYMAP=slovene\nFONT=lat2-16' > /etc/vconsole.conf"
 	arch_chroot "(echo 8; echo 42; echo 1) | tzselect"
 	arch_chroot "ln -sf /usr/share/zoneinfo/Europe/Ljubljana /etc/localtime"
 	arch_chroot "hwclock --systohc --utc"
