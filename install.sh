@@ -55,18 +55,18 @@ hostnameAndUnmount () {
 	arch_chroot "reboot"
 }
 
-echo -e '\e[42mStarting custom Arch installation.'
-echo -e '\e[42mUpdating package list.'
+echo -e 'Starting custom Arch installation.'
+echo -e 'Updating package list.'
 refreshPackageList
-echo -e '\e[42mSetting keyboard and updating system clock.'
+echo -e 'Setting keyboard and updating system clock.'
 setKeyboard
-echo -e '\e[42mMaking BIOS/MBT partition table and partition.'
+echo -e 'Making BIOS/MBT partition table and partition.'
 createPartition
-echo -e '\e[42mUpdating and ranking mirrorlist.'
+echo -e 'Updating and ranking mirrorlist.'
 updateAndRankMirrorlist
-echo -e '\e[42mGeneral installation and configuration.'
+echo -e 'General installation and configuration.'
 installation
-echo -e '\e[42mInstalling bootloader.'
+echo -e 'Installing bootloader.'
 installBootloader
-echo -e '\e[42mSetting hostname, unmounting and rebooting.'
+echo -e 'Setting hostname, unmounting and rebooting.'
 hostnameAndUnmount
